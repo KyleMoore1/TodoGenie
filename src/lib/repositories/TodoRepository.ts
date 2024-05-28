@@ -1,4 +1,4 @@
-import { Todo } from '$lib/todo/Todo';
+import type { Todo } from '$lib/todo/Todo';
 
 export interface ITodoRepository {
 	findAll(): Promise<Todo[]>;
