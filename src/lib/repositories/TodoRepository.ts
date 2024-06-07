@@ -1,7 +1,7 @@
 import type { Todo } from '$lib/todo/Todo';
 
 export interface ITodoRepository {
-	findAll(): Promise<Todo[]>;
+	findAll(user_id: string): Promise<Todo[]>;
 	findById(id: string): Promise<Todo>;
 	create(todo: Omit<Todo, 'id'>): Promise<boolean>;
 	update(todo: Todo): Promise<boolean>;
@@ -11,8 +11,8 @@ export interface ITodoRepository {
 export class InMemoryTodoRepository implements ITodoRepository {
 	private todos: Todo[] = [];
 
-	async findAll(): Promise<Todo[]> {
-		return this.todos;
+	async findAll(user_id: string): Promise<Todo[]> {
+		return this.todos.filter((todo) => todo.user_id === user_id);
 	}
 
 	async findById(id: string): Promise<Todo> {
