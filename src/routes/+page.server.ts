@@ -1,14 +1,11 @@
 import type { PageServerLoad } from './$types';
 import { todoService } from '$lib/services';
-import type { Actions } from './$types';
 
-export const load: PageServerLoad = async ({ locals }) => {
-	const user_id = locals.user?.id;
-	if (!user_id) {
-		throw new Error('User not found');
-	}
+export const load: PageServerLoad = async ({ fetch }) => {
+	const response = await fetch('/api/v1/todos/all');
+	const todos = await response.json();
 	return {
-		todos: await todoService.getAllTodos(user_id)
+		todos: todos
 	};
 };
 
