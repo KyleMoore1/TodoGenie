@@ -1,9 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, test, expect, beforeEach } from 'vitest';
 import { TodoService } from '$lib/services/TodoService';
 import { InMemoryTodoRepository } from '$lib/repositories/TodoRepository';
 import { faker } from '@faker-js/faker';
 
-describe('TodoService', () => {
+describe.concurrent('TodoService', () => {
 	let service: TodoService;
 	let repository: InMemoryTodoRepository;
 
@@ -12,7 +12,7 @@ describe('TodoService', () => {
 		service = new TodoService(repository);
 	});
 
-	it('should add a new todo', async () => {
+	test('should add a new todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
 		const result = await service.addTodo(title, user_id);
@@ -23,7 +23,7 @@ describe('TodoService', () => {
 		expect(todos[0].completed).toBe(false);
 	});
 
-	it('should get all todos', async () => {
+	test('should get all todos', async () => {
 		const title1 = faker.lorem.sentence();
 		const title2 = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
@@ -35,7 +35,13 @@ describe('TodoService', () => {
 		expect(todos[1].title).toBe(title2);
 	});
 
-	it('should update an existing todo', async () => {
+	test('should return empty array if no todos are added', async () => {
+		const user_id = faker.string.uuid();
+		const todos = await service.getAllTodos(user_id);
+		expect(todos.length).toBe(0);
+	});
+
+	test('should update an existing todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
 		await service.addTodo(title, user_id);
@@ -48,7 +54,7 @@ describe('TodoService', () => {
 		expect(updatedTodo.title).toBe('Updated Title');
 	});
 
-	it('should delete an existing todo', async () => {
+	test('should delete an existing todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
 		await service.addTodo(title, user_id);
@@ -60,7 +66,7 @@ describe('TodoService', () => {
 		expect(todos.length).toBe(0);
 	});
 
-	it('should complete an incomplete todo', async () => {
+	test('should complete an incomplete todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
 		await service.addTodo(title, user_id);
@@ -72,7 +78,7 @@ describe('TodoService', () => {
 		expect(completedTodo.completed).toBe(true);
 	});
 
-	it('should uncomplete a completed todo', async () => {
+	test('should uncomplete a completed todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
 		await service.addTodo(title, user_id);
