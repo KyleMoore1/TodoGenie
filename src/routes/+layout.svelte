@@ -30,7 +30,10 @@
 </script>
 
 {#if !$page.url.pathname.startsWith('/auth')}
-	<NavBar {data} />
+	<div class="grid h-full w-screen grid-cols-1 overflow-hidden text-smd md:grid-cols-[280px,1fr]">
+		<NavBar {data} />
+		<slot />
+	</div>
+{:else}
+	<slot />
 {/if}
-
-<slot />
