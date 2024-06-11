@@ -17,7 +17,7 @@
 	<div>
 		<ul class="space-y-2">
 			<li>
-				<Button href="/" class="w-full">All</Button>
+				<Button href="/tasks/all" class="w-full">All</Button>
 			</li>
 			<li>
 				<Button href="/" class="w-full" variant="ghost">Today</Button>
