@@ -1,4 +1,4 @@
-import { Entity } from '$lib/core/entity';
+import { Entity } from '$lib/app/core/entity';
 
 export class Todo extends Entity {
 	user_id: string;

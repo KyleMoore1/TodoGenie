@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import { TodoService } from '$lib/services/TodoService';
-import { InMemoryTodoRepository } from '$lib/repositories/TodoRepository';
+import { TodoService } from '$lib/app/todo/domain/todo-service';
+import { InMemoryTodoRepository } from '$lib/app/todo/data-access/todo-repository';
 import { faker } from '@faker-js/faker';
 
 describe.concurrent('TodoService', () => {

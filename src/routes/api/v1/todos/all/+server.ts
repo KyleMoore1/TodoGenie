@@ -1,6 +1,6 @@
 import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
-import { todoService } from '$lib/services';
+import { todoService } from '$lib/app/todo';
 
 export const GET: RequestHandler = async ({ locals }) => {
 	const user_id = locals.user?.id;

@@ -1,5 +1,5 @@
-import type { ITodoRepository } from '$lib/repositories/TodoRepository';
-import { Todo } from '$lib/todo/todo';
+import type { ITodoRepository } from '$lib/app/todo/data-access/todo-repository';
+import { Todo } from '$lib/app/todo/domain/todo';
 
 export class TodoService {
 	private readonly _repository: ITodoRepository;

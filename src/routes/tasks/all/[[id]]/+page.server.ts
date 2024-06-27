@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { todoService } from '$lib/services';
+import { todoService } from '$lib/app/todo';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const response = await fetch('/api/v1/todos/all');

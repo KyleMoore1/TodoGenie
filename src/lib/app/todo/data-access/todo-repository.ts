@@ -1,4 +1,4 @@
-import type { Todo } from '$lib/todo/todo';
+import type { Todo } from '$lib/app/todo/domain/todo';
 
 export interface ITodoRepository {
 	findAll(user_id: string): Promise<Todo[]>;
