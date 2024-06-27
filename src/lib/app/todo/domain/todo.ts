@@ -13,16 +13,12 @@ export class Todo extends Entity {
 	}
 
 	public complete() {
-		this.update();
+		super.update();
 		this.completed = true;
 	}
 
 	public uncomplete() {
-		this.update();
+		super.update();
 		this.completed = false;
-	}
-
-	private update() {
-		this.updated_at = new Date();
 	}
 }

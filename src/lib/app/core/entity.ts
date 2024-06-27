@@ -9,4 +9,8 @@ export abstract class Entity {
 		this.created_at = now;
 		this.updated_at = now;
 	}
+
+	public update() {
+		this.updated_at = new Date();
+	}
 }
