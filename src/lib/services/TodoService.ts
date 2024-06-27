@@ -1,5 +1,5 @@
 import type { ITodoRepository } from '$lib/repositories/TodoRepository';
-import type { Todo } from '$lib/todo/Todo';
+import { Todo } from '$lib/todo/todo';
 
 export class TodoService {
 	private readonly _repository: ITodoRepository;
@@ -8,12 +8,8 @@ export class TodoService {
 	}
 
 	public addTodo(title: string, user_id: string): Promise<boolean> {
-		const newTodo: Omit<Todo, 'id'> = {
-			title: title,
-			completed: false,
-			user_id: user_id
-		};
-		return this._repository.create(newTodo);
+		const newTodo = new Todo(user_id, title);
+		return this._repository.save(newTodo);
 	}
 
 	public getAllTodos(user_id: string): Promise<Todo[]> {
@@ -34,19 +30,13 @@ export class TodoService {
 
 	public async completeTodo(id: string): Promise<boolean> {
 		const todo: Todo = await this._repository.findById(id);
-		if (todo.completed) {
-			return false;
-		}
-		todo.completed = true;
+		todo.complete();
 		return this._repository.update(todo);
 	}
 
 	public async unCompleteTodo(id: string): Promise<boolean> {
 		const todo: Todo = await this._repository.findById(id);
-		if (!todo.completed) {
-			return false;
-		}
-		todo.completed = false;
+		todo.uncomplete();
 		return this._repository.update(todo);
 	}
 }

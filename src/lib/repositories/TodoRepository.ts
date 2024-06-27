@@ -1,9 +1,9 @@
-import type { Todo } from '$lib/todo/Todo';
+import type { Todo } from '$lib/todo/todo';
 
 export interface ITodoRepository {
 	findAll(user_id: string): Promise<Todo[]>;
 	findById(id: string): Promise<Todo>;
-	create(todo: Omit<Todo, 'id'>): Promise<boolean>;
+	save(todo: Omit<Todo, 'id'>): Promise<boolean>;
 	update(todo: Todo): Promise<boolean>;
 	delete(id: string): Promise<boolean>;
 }
@@ -23,12 +23,8 @@ export class InMemoryTodoRepository implements ITodoRepository {
 		return todo;
 	}
 
-	async create(todo: Omit<Todo, 'id'>): Promise<boolean> {
-		const newTodo: Todo = {
-			id: this.generateId(),
-			...todo
-		};
-		this.todos.push(newTodo);
+	async save(todo: Todo): Promise<boolean> {
+		this.todos.push(todo);
 		return true;
 	}
 
@@ -48,9 +44,5 @@ export class InMemoryTodoRepository implements ITodoRepository {
 		}
 		this.todos.splice(index, 1);
 		return true;
-	}
-
-	private generateId(): string {
-		return Math.random().toString(36).substr(2, 9);
 	}
 }
