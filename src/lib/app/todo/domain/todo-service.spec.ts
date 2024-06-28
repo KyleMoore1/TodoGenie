@@ -6,6 +6,7 @@ import {
 	TodoRepository
 } from '$lib/app/todo/data-access/todo-repository';
 import { faker } from '@faker-js/faker';
+import { TodoPriority } from './todo';
 
 describe.concurrent('TodoService', () => {
 	let service: TodoService;
@@ -93,5 +94,80 @@ describe.concurrent('TodoService', () => {
 		const uncompletedTodo = await service.getTodo(todo.id);
 		expect(result).toBe(true);
 		expect(uncompletedTodo.props.completed).toBe(false);
+	});
+
+	test('should set title of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		const result = await service.setTitle(todo.id, 'New Title');
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(result).toBe(true);
+		expect(updatedTodo.props.title).toBe('New Title');
+	});
+
+	test('should set content of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		const result = await service.setContent(todo.id, 'New Content');
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(result).toBe(true);
+		expect(updatedTodo.props.content).toBe('New Content');
+	});
+
+	test('should set due date of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		const due_date = faker.date.future();
+		const result = await service.setDueDate(todo.id, due_date);
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(result).toBe(true);
+		expect(updatedTodo.props.due_date).toBe(due_date);
+	});
+
+	test('should remove due date of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		const due_date = faker.date.future();
+		await service.setDueDate(todo.id, due_date);
+		const result = await service.removeDueDate(todo.id);
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(result).toBe(true);
+		expect(updatedTodo.props.due_date).toBe(undefined);
+	});
+
+	test('should set priority of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		const result = await service.setPriority(todo.id, TodoPriority.High);
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(result).toBe(true);
+		expect(updatedTodo.props.priority).toBe(TodoPriority.High);
+	});
+
+	test('should remove priority of a todo', async () => {
+		const title = faker.lorem.sentence();
+		const user_id = faker.string.uuid();
+		await service.addTodo(title, user_id);
+		const todos = await service.getAllTodos(user_id);
+		const todo = todos[0];
+		await service.setPriority(todo.id, TodoPriority.High);
+		await service.removePriority(todo.id);
+		const updatedTodo = await service.getTodo(todo.id);
+		expect(updatedTodo.props.priority).toBe(undefined);
 	});
 });
