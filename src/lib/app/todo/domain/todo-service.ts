@@ -1,5 +1,5 @@
 import type { ITodoRepository } from '$lib/app/todo/data-access/todo-repository';
-import { Todo } from '$lib/app/todo/domain/todo';
+import { Todo, type CreateTodoProps } from '$lib/app/todo/domain/todo';
 
 export class TodoService {
 	private readonly _repository: ITodoRepository;
@@ -8,7 +8,8 @@ export class TodoService {
 	}
 
 	public addTodo(title: string, user_id: string): Promise<boolean> {
-		const newTodo = new Todo(user_id, title);
+		const props: CreateTodoProps = { user_id, title };
+		const newTodo = Todo.create(props);
 		return this._repository.save(newTodo);
 	}
 

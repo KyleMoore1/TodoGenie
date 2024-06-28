@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Todo } from '$lib/todo/Todo.ts';
+	import type { Todo } from '$lib/app/todo/domain/todo.js';
 	import type { PageData } from './$types';
 	import { Input } from '$lib/components/ui/input/index.js';
 
@@ -46,10 +46,10 @@
 					<input
 						type="checkbox"
 						class="mr-2 h-4 w-4 accent-black border-gray-50 rounded"
-						bind:checked={todo.completed}
+						bind:checked={todo.props.completed}
 						on:change={(e) => handleCheckboxChange(e, todo.id)}
 					/>
-					<span class="flex-grow">{todo.title}</span>
+					<span class="flex-grow">{todo.props.title}</span>
 					<button class="delete-button" on:click={() => handleDelete(todo.id)}>Delete</button>
 				</li>
 			{/each}

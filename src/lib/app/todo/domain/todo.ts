@@ -1,24 +1,29 @@
-import { Entity } from '$lib/app/core/entity';
+import { Entity } from '../../core/entity';
 
-export class Todo extends Entity {
+export interface CreateTodoProps {
+	user_id: string;
+	title: string;
+}
+
+export interface TodoProps {
 	user_id: string;
 	title: string;
 	completed: boolean;
+}
 
-	constructor(user_id: string, title: string) {
-		super();
-		this.completed = false;
-		this.user_id = user_id;
-		this.title = title;
+export class Todo extends Entity<TodoProps> {
+	static create(create: CreateTodoProps): Todo {
+		const props: TodoProps = { ...create, completed: false };
+		return new Todo({ props });
 	}
 
-	public complete() {
+	complete() {
 		super.update();
-		this.completed = true;
+		this.props.completed = true;
 	}
 
-	public uncomplete() {
+	uncomplete() {
 		super.update();
-		this.completed = false;
+		this.props.completed = false;
 	}
 }
