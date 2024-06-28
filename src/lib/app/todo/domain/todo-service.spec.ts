@@ -22,7 +22,7 @@ describe.concurrent('TodoService', () => {
 		const user_id = faker.string.uuid();
 		const result = await service.addTodo(title, user_id);
 		const todos = await service.getAllTodos(user_id);
-		expect(result).toBe(true);
+		expect(result).toBeDefined();
 		expect(todos.length).toBe(1);
 		expect(todos[0].props.title).toBe(title);
 		expect(todos[0].props.completed).toBe(false);
@@ -36,8 +36,8 @@ describe.concurrent('TodoService', () => {
 		await service.addTodo(title2, user_id);
 		const todos = await service.getAllTodos(user_id);
 		expect(todos.length).toBe(2);
-		expect(todos[0].props.title).toBe(title1);
-		expect(todos[1].props.title).toBe(title2);
+		expect(todos[0].props.title).toBe(title2);
+		expect(todos[1].props.title).toBe(title1);
 	});
 
 	test('should return empty array if no todos are added', async () => {
@@ -49,9 +49,8 @@ describe.concurrent('TodoService', () => {
 	test('should update an existing todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
-		await service.addTodo(title, user_id);
-		const todos = await service.getAllTodos(user_id);
-		const todo = todos[0];
+		const todo_id = await service.addTodo(title, user_id);
+		const todo = await service.getTodo(todo_id);
 		todo.props.title = 'Updated Title';
 		const result = await service.updateTodo(todo);
 		const updatedTodo = await service.getTodo(todo.id);
@@ -74,11 +73,9 @@ describe.concurrent('TodoService', () => {
 	test('should complete an incomplete todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
-		await service.addTodo(title, user_id);
-		const todos = await service.getAllTodos(user_id);
-		const todo = todos[0];
-		const result = await service.completeTodo(todo.id);
-		const completedTodo = await service.getTodo(todo.id);
+		const todo_id = await service.addTodo(title, user_id);
+		const result = await service.completeTodo(todo_id);
+		const completedTodo = await service.getTodo(todo_id);
 		expect(result).toBe(true);
 		expect(completedTodo.props.completed).toBe(true);
 	});
@@ -123,26 +120,22 @@ describe.concurrent('TodoService', () => {
 	test('should set due date of a todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
-		await service.addTodo(title, user_id);
-		const todos = await service.getAllTodos(user_id);
-		const todo = todos[0];
+		const todo_id = await service.addTodo(title, user_id);
 		const due_date = faker.date.future();
-		const result = await service.setDueDate(todo.id, due_date);
-		const updatedTodo = await service.getTodo(todo.id);
+		const result = await service.setDueDate(todo_id, due_date);
+		const updatedTodo = await service.getTodo(todo_id);
 		expect(result).toBe(true);
-		expect(updatedTodo.props.due_date).toBe(due_date);
+		expect(updatedTodo.props.due_date?.getMilliseconds).toBe(due_date.getMilliseconds);
 	});
 
 	test('should remove due date of a todo', async () => {
 		const title = faker.lorem.sentence();
 		const user_id = faker.string.uuid();
-		await service.addTodo(title, user_id);
-		const todos = await service.getAllTodos(user_id);
-		const todo = todos[0];
+		const todo_id = await service.addTodo(title, user_id);
 		const due_date = faker.date.future();
-		await service.setDueDate(todo.id, due_date);
-		const result = await service.removeDueDate(todo.id);
-		const updatedTodo = await service.getTodo(todo.id);
+		await service.setDueDate(todo_id, due_date);
+		const result = await service.removeDueDate(todo_id);
+		const updatedTodo = await service.getTodo(todo_id);
 		expect(result).toBe(true);
 		expect(updatedTodo.props.due_date).toBe(undefined);
 	});

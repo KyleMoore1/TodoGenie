@@ -11,7 +11,12 @@ export class TodoMapper implements Mapper<Todo, TodoModel> {
 			props: {
 				user_id: record.user_id,
 				title: record.title,
-				completed: record.completed
+				content: record.content ? record.content : undefined,
+				completed: record.completed,
+				completed_at: record.completed_at ? new Date(record.completed_at) : undefined,
+				project_id: record.project_id ? record.project_id : undefined,
+				due_date: record.due_date ? new Date(record.due_date) : undefined,
+				priority: record.todo_priority ? record.todo_priority : undefined
 			}
 		});
 		return entity;
@@ -24,7 +29,12 @@ export class TodoMapper implements Mapper<Todo, TodoModel> {
 			updated_at: copy.updated_at,
 			user_id: copy.user_id,
 			title: copy.title,
-			completed: copy.completed
+			content: copy.content ? copy.content : null,
+			completed: copy.completed,
+			completed_at: copy.completed_at ? copy.completed_at : null,
+			project_id: copy.project_id ? copy.project_id : null,
+			due_date: copy.due_date ? copy.due_date : null,
+			todo_priority: copy.priority ? copy.priority : null
 		};
 		return record;
 	}

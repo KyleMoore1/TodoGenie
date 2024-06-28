@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, uuid, boolean } from 'drizzle-orm/pg-core';
-import { asc, between, count, eq, getTableColumns, sql } from 'drizzle-orm';
+import { pgTable, text, timestamp, uuid, boolean, integer } from 'drizzle-orm/pg-core';
+import { eq, desc } from 'drizzle-orm';
 import { db } from '../../db';
 import type { Todo } from '$lib/app/todo/domain/todo';
 import { TodoMapper } from '../domain/todo-mapper';
@@ -57,7 +57,12 @@ export const todos_table = pgTable('todos_table', {
 	updated_at: timestamp('updated_at').notNull(),
 	user_id: uuid('user_id').notNull(),
 	title: text('title').notNull(),
-	completed: boolean('completed').notNull()
+	content: text('content'),
+	completed: boolean('completed').notNull(),
+	completed_at: timestamp('completed_at'),
+	project_id: uuid('project_id'),
+	due_date: timestamp('due_date'),
+	todo_priority: integer('todo_priority')
 });
 
 export type TodoModel = typeof todos_table.$inferSelect;
@@ -69,6 +74,7 @@ export class TodoRepository implements ITodoRepository {
 		const todos: TodoModel[] = await db
 			.select()
 			.from(todos_table)
+			.orderBy(desc(todos_table.created_at))
 			.where(eq(todos_table.user_id, user_id));
 		return todos.map((todo) => this.mapper.toDomain(todo));
 	}

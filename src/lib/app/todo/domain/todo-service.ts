@@ -7,10 +7,11 @@ export class TodoService {
 		this._repository = repository;
 	}
 
-	public addTodo(title: string, user_id: string): Promise<boolean> {
+	public async addTodo(title: string, user_id: string): Promise<string> {
 		const props: CreateTodoProps = { user_id, title };
 		const newTodo = Todo.create(props);
-		return this._repository.save(newTodo);
+		await this._repository.save(newTodo);
+		return newTodo.id;
 	}
 
 	public getAllTodos(user_id: string): Promise<Todo[]> {

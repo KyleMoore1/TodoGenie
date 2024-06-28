@@ -8,6 +8,13 @@
       "when": 1719547523665,
       "tag": "0000_fearless_the_enforcers",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1719607847853,
+      "tag": "0001_wooden_boomer",
+      "breakpoints": true
     }
   ]
 }
